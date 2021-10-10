@@ -1,4 +1,6 @@
+// import 3rd party modules
 const mongoose = require('mongoose');
+// import local modules
 const {
   bufferCommands,
   bufferTimeoutMS,
@@ -33,14 +35,13 @@ const gender = {
 };
 
 const cardAddress = {
-  address: String,
+  address: { type: String, required: [true, 'Provide address'] },
   kelurahan: {
     type: mongoose.Schema.Types.ObjectId,
     default: null,
   },
-  rt: Number,
-  rw: Number,
-  required: [true, 'Provide address from citizen id card'],
+  rt: { type: Number, default: 0 },
+  rw: { type: Number, default: 0 },
 };
 
 const phoneNumber = {
@@ -64,9 +65,8 @@ const currentAddress = {
     type: mongoose.Schema.Types.ObjectId,
     default: null,
   },
-  rt: Number,
-  rw: Number,
-  required: [true, 'Provide address from citizen id card'],
+  rt: { type: Number, default: 0 },
+  rw: { type: Number, default: 0 },
 };
 
 const religion = { type: String };

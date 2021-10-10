@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^20.2.0",
+    "bcryptjs": "^2.4.3",
     "joi": "^17.4.2",
     "mongoose": "^6.0.9"
   },
