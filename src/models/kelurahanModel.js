@@ -44,6 +44,11 @@ const website = {
   type: String,
 };
 
+const kecamatan = {
+  type: mongoose.Schema.Types.ObjectId,
+  required: [true, 'Provide Kecamatan ID'],
+};
+
 const kelurahanSchema = mongoose.Schema({
   code,
   name,
@@ -52,6 +57,7 @@ const kelurahanSchema = mongoose.Schema({
   postCode,
   area,
   website,
+  kecamatan,
 });
 
 kelurahanSchema.set({

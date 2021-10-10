@@ -36,7 +36,6 @@ const cardAddress = {
   address: String,
   kelurahan: {
     type: mongoose.Schema.Types.ObjectId,
-    required: [true, 'Provide Kelurahan ID'],
     default: null,
   },
   rt: Number,
@@ -63,7 +62,6 @@ const currentAddress = {
   address: String,
   kelurahan: {
     type: mongoose.Schema.Types.ObjectId,
-    required: [true, 'Provide Kelurahan ID'],
     default: null,
   },
   rt: Number,
@@ -112,10 +110,25 @@ const roles = {
     values: ['umum', 'korlu', 'korcam', 'korpil', 'admin'],
     message: '{VALUE} is not supported',
   },
+  default: 'umum',
 };
 
 const confirmed = { type: Boolean, default: false };
 const addBy = { type: mongoose.Schema.Types.ObjectId, default: null };
+
+const complaintSchema = new mongoose.Schema({
+  content: { type: String, default: '' },
+  responded: { type: Boolean, default: false },
+  readTime: { type: Date, default: null },
+  createdAt: String,
+  updatedAt: String,
+}, {
+  timestamps: {
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    currentTime: () => new Date(Date.now()).toString(),
+  },
+});
 
 const userSchema = new mongoose.Schema({
   fullName,
@@ -134,6 +147,7 @@ const userSchema = new mongoose.Schema({
   addBy,
   password,
   roles,
+  complaints: [complaintSchema],
   children: [mongoose.Schema.Types.ObjectId],
   createdAt: String,
   updatedAt: String,

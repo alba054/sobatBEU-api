@@ -4,4 +4,9 @@ const bufferCommands = true;
 const optimisticConcurrency = true;
 const autoCreate = true;
 
-module.exports = { bufferCommands, bufferTimeoutMS, optimisticConcurrency };
+module.exports = {
+  bufferCommands,
+  bufferTimeoutMS,
+  optimisticConcurrency,
+  autoCreate,
+};
