@@ -1,5 +1,10 @@
 const mongoose = require('mongoose');
-const { bufferCommands, bufferTimeoutMS, optimisticConcurrency } = require('./config');
+const {
+  bufferCommands,
+  bufferTimeoutMS,
+  optimisticConcurrency,
+  autoCreate,
+} = require('../config');
 
 const fullName = {
   firstName: { type: String, required: [true, 'Provide First Name'] },
@@ -29,8 +34,11 @@ const gender = {
 
 const cardAddress = {
   address: String,
-  kelurahan: String,
-  kecamatan: String,
+  kelurahan: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: [true, 'Provide Kelurahan ID'],
+    default: null,
+  },
   rt: Number,
   rw: Number,
   required: [true, 'Provide address from citizen id card'],
@@ -53,8 +61,11 @@ const noKK = {
 
 const currentAddress = {
   address: String,
-  kelurahan: String,
-  kecamatan: String,
+  kelurahan: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: [true, 'Provide Kelurahan ID'],
+    default: null,
+  },
   rt: Number,
   rw: Number,
   required: [true, 'Provide address from citizen id card'],
@@ -95,8 +106,16 @@ const password = {
   required: [true, 'Provide Password'],
 };
 
+const roles = {
+  type: String,
+  enum: {
+    values: ['umum', 'korlu', 'korcam', 'korpil', 'admin'],
+    message: '{VALUE} is not supported',
+  },
+};
+
 const confirmed = { type: Boolean, default: false };
-const addBy = { type: String, default: null };
+const addBy = { type: mongoose.Schema.Types.ObjectId, default: null };
 
 const userSchema = new mongoose.Schema({
   fullName,
@@ -114,6 +133,8 @@ const userSchema = new mongoose.Schema({
   confirmed,
   addBy,
   password,
+  roles,
+  children: [mongoose.Schema.Types.ObjectId],
   createdAt: String,
   updatedAt: String,
 }, {
@@ -129,6 +150,7 @@ userSchema.set({
   bufferCommands,
   bufferTimeoutMS,
   optimisticConcurrency,
+  autoCreate,
 });
 
 const UserModel = new mongoose.model('User', userSchema);
