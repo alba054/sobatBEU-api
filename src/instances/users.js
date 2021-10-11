@@ -24,7 +24,8 @@ class User {
   constructor(
     fn, birth, gender, cardAddress, phoneNumber,
     noKK, curAddress, religion, marriageStat, job,
-    citizenship, nik, password,
+    citizenship, nik, password, addBy = null, roles = 'umum',
+    confirmed = false, complaints = [],
   ) {
     this.fn = fn;
     this.birth = birth;
@@ -38,6 +39,10 @@ class User {
     this.job = job;
     this.citizenship = citizenship;
     this.nik = nik;
+    this.addBy = addBy;
+    this.roles = roles;
+    this.confirmed = confirmed;
+    this.complaints = complaints;
 
     const salt = bycrpt.genSaltSync();
     this.password = bycrpt.hashSync(password, salt);
@@ -45,7 +50,7 @@ class User {
 
   addUser() {
     const newUser = new UserModel({
-      fullname: this.fn,
+      fullName: this.fn,
       birth: this.birth,
       gender: this.gender,
       cardAddress: this.cardAddress,
@@ -58,14 +63,25 @@ class User {
       citizenship: this.citizenship,
       nik: this.nik,
       password: this.password,
+      addBy: this.addBy,
+      roles: this.roles,
+      confirmed: this.confirmed,
+      complaints: this.complaints,
     });
+    // console.log(newUser);
 
-    return newUser;
+    newUser.save()
+      .then((savedDoc) => savedDoc === newUser)
+      .catch((err) => console.log(err));
     // try {
     //   await newUser.save();
     // } catch (err) {
     //   console.log(err);
     // }
+  }
+
+  static getUser(fullname) {
+    return UserModel.findOne();
   }
 }
 

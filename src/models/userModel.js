@@ -30,7 +30,7 @@ const gender = {
     values: ['Male', 'Female'],
     message: '{VALUE} is not supported',
   },
-  lowercase: true,
+  // lowercase: true,
   required: [true, 'Provide gender'],
 };
 
@@ -77,7 +77,7 @@ const marriageStatus = {
     values: ['Sudah Menikah', 'Belum Menikah'],
     message: '{VALUE} is not supported',
   },
-  lowercase: true,
+  // lowercase: true,
   required: [true, 'Provide Marriage Status'],
 };
 
@@ -88,7 +88,7 @@ const citizenship = {
     values: ['WNI', 'WNA'],
     message: '{VALUE} is not supported',
   },
-  lowercase: true,
+  // lowercase: true,
 };
 
 const nik = {

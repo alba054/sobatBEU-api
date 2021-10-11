@@ -1,3 +1,5 @@
+// import 3rd party modules
+const mongoose = require('mongoose');
 // import local modules
 const User = require('./instances/users');
 
@@ -31,10 +33,10 @@ const routes = [
     method: ['POST', 'GET'],
     path: '/api/user',
     handler: (request, h) => {
+      mongoose.connect('mongodb://localhost:27017/sobatBeuTest');
       if (request.method === 'post') {
-        console.log('hai');
         const {
-          fn,
+          fullname,
           birth,
           gender,
           cardAddress,
@@ -47,18 +49,24 @@ const routes = [
           citizenship,
           nik,
           password,
+          addBy,
+          roles,
+          confirmed,
+          complaints,
         } = request.payload;
 
         const newUser = new User(
-          fn, birth, gender, cardAddress, phoneNumber, noKK,
+          fullname, birth, gender, cardAddress, phoneNumber, noKK,
           currentAddress, religion, marriageStatus, job, citizenship,
-          nik, password,
+          nik, password, addBy, roles, confirmed, complaints,
         );
 
-        return JSON.parse(newUser.addUser());
+        newUser.addUser();
+
+        return { message: 'success' };
       }
 
-      return 'Hello, this is api/user';
+      return User.getUser('a');
     },
   },
 ];
