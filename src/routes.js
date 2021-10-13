@@ -56,7 +56,7 @@ const routes = [
   {
     method: ['POST', 'GET'],
     path: '/api/user',
-    handler: (request, h) => {
+    handler: async (request, h) => {
       mongoose.connect('mongodb://localhost:27017/sobatBeuTest');
       if (request.method === 'post') {
         const {
@@ -80,16 +80,17 @@ const routes = [
         } = request.payload;
 
         try {
-          User.addUser(
+          const user = await User.addUser(
             fullname, birth, gender, cardAddress, phoneNumber, noKK,
             currentAddress, religion, marriageStatus, job, citizenship,
             nik, password, addBy, roles, confirmed, complaints,
           );
-        } catch (err) {
-          console.log(err);
-        }
 
-        return { message: 'success' };
+          return { message: 'success' };
+        } catch (err) {
+          return { status: 'failed', message: err.message };
+          // return 'error';
+        }
       }
 
       return User.getUser('a');

@@ -28,7 +28,7 @@ class User {
     // this.password = bycrpt.hashSync(password, salt);
   }
 
-  static addUser(
+  static async addUser(
     fn, birth, gender, cardAddress, phoneNumber,
     noKK, curAddress, religion, marriageStat, job,
     citizenship, nik, password, addBy = null, roles = 'umum',
@@ -56,13 +56,13 @@ class User {
       marriageStatus: marriageStat,
     });
     // console.log(newUser);
+    // try {
+    const user = await newUser.save();
+    return user;
+    // } catch (err) {
+    // console.log(err.name);
+    // }
 
-    newUser.save()
-      .then((savedDoc) => savedDoc === newUser)
-      .catch((err) => {
-        console.log(err.message);
-        // throw new Error('this is error');
-      });
     // try {
     //   await newUser.save();
     // } catch (err) {
@@ -84,14 +84,6 @@ class User {
     }
 
     return user;
-    // return new Promise();
-    // console.log(queryUser.exec());
-    // queryUser.select()
-    // return queryUser;
-    // let isExist = false;
-
-    // return queryUser.exec();
-    // return isExist;
   }
 }
 

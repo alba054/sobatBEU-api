@@ -159,16 +159,29 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-const handleE11000 = (error, res, next) => {
+const handleError = (error, res, next) => {
+  console.log(error.message);
   if (error.name === 'MongoServerError' && error.code === 11000) {
-    console.log(error);
-    next(new Error('There was a duplicate key error'));
-  } else {
-    next();
+    if (error.keyPattern.phoneNumber) {
+      next(new Error('phone number has been registered'));
+    }
+  } else if (error.message.includes('Provide First Name')) {
+    next(new Error('Provide First Name'));
+  } else if (error.message.includes('Provide Last Name')) {
+    next(new Error('Provide Last Name'));
   }
 };
 
-userSchema.post('save', handleE11000);
+// const handleError = (error, res, next) => {
+//   if (error.message.includes('Provide First Name')) {
+//     next(new Error('Provide First Name'));
+//   } else if (error.message.includes('Provide Last Name')) {
+//     next(new Error('Provide Last Name'));
+//   }
+// };
+
+userSchema.post('save', handleError);
+// userSchema.post('save', handleRequiredField);
 
 // options for schema
 userSchema.set({
