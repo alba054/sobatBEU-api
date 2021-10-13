@@ -159,6 +159,17 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+const handleE11000 = (error, res, next) => {
+  if (error.name === 'MongoServerError' && error.code === 11000) {
+    console.log(error);
+    next(new Error('There was a duplicate key error'));
+  } else {
+    next();
+  }
+};
+
+userSchema.post('save', handleE11000);
+
 // options for schema
 userSchema.set({
   bufferCommands,
