@@ -1,6 +1,9 @@
+// import 3rd party modules
 const Hapi = require('@hapi/hapi');
-
+// import local modules
 const routes = require('./routes');
+
+require('dotenv').config();
 
 const init = async () => {
   const server = Hapi.server({

@@ -8,6 +8,8 @@ const {
   autoCreate,
 } = require('../config');
 
+const handleError = require('./utils');
+
 const fullName = {
   firstName: { type: String, required: [true, 'Provide First Name'] },
   lastName: { type: String, required: [true, 'Provide Last Name'] },
@@ -27,7 +29,7 @@ const birth = {
 const gender = {
   type: String,
   enum: {
-    values: ['Male', 'Female'],
+    values: ['male', 'female'],
     message: '{VALUE} is not supported',
   },
   // lowercase: true,
@@ -56,17 +58,11 @@ const phoneNumber = {
 
 const noKK = {
   type: String,
-  required: [true, 'Provide Family Card Number'],
+  default: 'xxx00000xx',
 };
 
 const currentAddress = {
   address: String,
-  kelurahan: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: null,
-  },
-  rt: { type: Number, default: 0 },
-  rw: { type: Number, default: 0 },
 };
 
 const religion = { type: String };
@@ -74,7 +70,7 @@ const religion = { type: String };
 const marriageStatus = {
   type: String,
   enum: {
-    values: ['Sudah Menikah', 'Belum Menikah'],
+    values: ['sudah menikah', 'belum menikah'],
     message: '{VALUE} is not supported',
   },
   // lowercase: true,
@@ -158,19 +154,6 @@ const userSchema = new mongoose.Schema({
     currentTime: () => new Date(Date.now()).toString(),
   },
 });
-
-const handleError = (error, res, next) => {
-  console.log(error.message);
-  if (error.name === 'MongoServerError' && error.code === 11000) {
-    if (error.keyPattern.phoneNumber) {
-      next(new Error('phone number has been registered'));
-    }
-  } else if (error.message.includes('Provide First Name')) {
-    next(new Error('Provide First Name'));
-  } else if (error.message.includes('Provide Last Name')) {
-    next(new Error('Provide Last Name'));
-  }
-};
 
 // const handleError = (error, res, next) => {
 //   if (error.message.includes('Provide First Name')) {
