@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { bufferCommands, bufferTimeoutMS, optimisticConcurrency } = require('../config');
+const { bufferCommands, bufferTimeoutMS, optimisticConcurrency } = require('../config/schema');
 
 const code = {
   type: String,

@@ -15,9 +15,9 @@ numOfReaders: { type: Number, default: 0 },
 */
 
 class News {
-  static async addNews(num = 0, types = 'link', content = '', thumbnail = Buffer.alloc(5)) {
+  static async addNews(numOfReaders = 0, types = 'link', content = '', thumbnail = Buffer.alloc(5)) {
     const newNews = new NewsModel({
-      numOfReaders: num,
+      numOfReaders,
       types,
       content,
       thumbnail,
@@ -28,3 +28,5 @@ class News {
     return news;
   }
 }
+
+module.exports = News;

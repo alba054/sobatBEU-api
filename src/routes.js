@@ -1,9 +1,13 @@
 // import 3rd party modules
-const mongoose = require('mongoose');
-const bycrpt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 // import local modules
 const User = require('./instances/users');
+const News = require('./instances/news');
+const loginHandler = require('./handlers/login');
 
+require('dotenv').config();
+
+require('./config/database').connect(process.env.LOCAL_DATABASE_URI);
 /**
  * fn
  * birth
@@ -20,12 +24,45 @@ const User = require('./instances/users');
  * password
  */
 
+
+
 const routes = [
   {
     method: 'GET',
     path: '/',
     handler: (request, h) => {
-      const response = h.response({ status: 'success', message: 'Hello World' });
+      const { token } = request.headers;
+      if (typeof token === 'undefined') {
+        const response = h.response({ status: 'failed', message: 'Missing token in headers' });
+        response.code(401);
+        return response;
+      }
+
+      let response = null;
+      let decoded = null;
+      try {
+        decoded = jwt.verify(
+          token,
+          process.env.SECRET_KEY,
+        );
+      } catch (err) {
+        response = null;
+        switch (err.message) {
+          case 'invalid token':
+            response = h.response({ status: 'failed', message: 'invalid token' });
+            response.code(401);
+            return response;
+          case 'jwt malformed':
+            response = h.response({ status: 'failed', message: 'jwt is not formed correctly' });
+            response.code(401);
+            return response;
+          default:
+            response = h.response({ status: 'failed', message: 'error' });
+            response.code(401);
+            return response;
+        }
+      }
+      response = h.response({ status: 'success', message: decoded.user });
       response.code(200);
       return response;
     },
@@ -33,61 +70,45 @@ const routes = [
   {
     method: 'POST',
     path: '/login',
-    handler: async (request, h) => {
-      mongoose.connect('mongodb://localhost:27017/sobatBeuTest');
-      const { phoneNumber, password } = request.payload;
-      const user = new User(phoneNumber, password);
-
-      try {
-        const fixUser = await user.login();
-        const res = { status: 'success', message: 'user is valid', user: fixUser };
-
-        const response = h.response(res);
-
-        return response;
-      } catch (err) {
-        if (err.message === 'phone number is not registered') {
-          return { status: 'failed', message: err.message };
-        }
-        return { status: 'failed', message: err.message };
-      }
-    },
+    handler: loginHandler,
   },
   {
     method: ['POST', 'GET'],
     path: '/api/user',
     handler: async (request, h) => {
-      mongoose.connect('mongodb://localhost:27017/sobatBeuTest');
+      // mongoose.connect('mongodb://localhost:27017/sobatBeuTest');
       if (request.method === 'post') {
-        const {
-          fullname,
-          birth,
-          gender,
-          cardAddress,
-          phoneNumber,
-          noKK,
-          currentAddress,
-          religion,
-          marriageStatus,
-          job,
-          citizenship,
-          nik,
-          password,
-          addBy,
-          roles,
-          confirmed,
-          complaints,
-        } = request.payload;
-
         try {
+          const {
+            fullname,
+            birth,
+            gender,
+            cardAddress,
+            phoneNumber,
+            noKK,
+            currentAddress,
+            religion,
+            marriageStatus,
+            job,
+            citizenship,
+            nik,
+            password,
+            addBy,
+            roles,
+            confirmed,
+            complaints,
+          } = request.payload;
+
           const user = await User.addUser(
             fullname, birth, gender, cardAddress, phoneNumber, noKK,
             currentAddress, religion, marriageStatus, job, citizenship,
             nik, password, addBy, roles, confirmed, complaints,
           );
-
-          return { message: 'success' };
+          return { status: 'success', message: 'adding new user successfully', res: user };
         } catch (err) {
+          if (err instanceof TypeError) {
+            return { status: 'failed', message: 'doesn\'t meet payload requirements' };
+          }
           return { status: 'failed', message: err.message };
           // return 'error';
         }
@@ -96,6 +117,40 @@ const routes = [
       return User.getUser('a');
     },
   },
+  // {
+  //   method: ['POST', 'GET', 'PUT'],
+  //   path: '/api/news/{id?}',
+  //   handler: async (request, h) => {
+  //     switch (request.method) {
+  //       case 'get':
+  //         if (request.params.id) {
+  //           try {
+  //             const news = News.
+  //           }
+  //         }
+  //       case 'post':
+  //         try {
+  //           const {
+  //             numOfReaders,
+  //             types,
+  //             content,
+  //             thumbnail = Buffer.alloc(5),
+  //           } = request.payload;
+  //           const news = await News.addNews(numOfReaders, types, content, thumbnail);
+
+  //           return { status: 'success', message: 'adding news successfully', res: news };
+  //         } catch (err) {
+  //           // if (err instanceof TypeError) {
+  //           //   return { status: 'failed', message: 'doesn\'t meet payload requirements' };
+  //           // }
+  //           return { status: 'failed', message: err.message };
+  //         }
+
+  //       default:
+  //         return { status: 'bad request', message: 'not a legal path' };
+  //     }
+  //   },
+  // },
 ];
 
 module.exports = routes;

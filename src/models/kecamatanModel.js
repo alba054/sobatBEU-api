@@ -4,14 +4,14 @@ const {
   bufferTimeoutMS,
   optimisticConcurrency,
   autoCreate,
-} = require('../config');
+} = require('../config/schema');
 
 const kecamatanSchema = new mongoose.Schema({
   code: {
     type: String,
     validate: {
       validator: (v) => /\d{5,7}/.test(v),
-      message: 'kecamatan code is not valid',
+      message: 'kecamatan code `is not valid',
     },
   },
   name: { type: String, required: [true, 'Provide Name'] },

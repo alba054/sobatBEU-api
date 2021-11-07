@@ -6,7 +6,7 @@ const {
   bufferTimeoutMS,
   optimisticConcurrency,
   autoCreate,
-} = require('../config');
+} = require('../config/schema');
 
 const handleError = require('./utils');
 

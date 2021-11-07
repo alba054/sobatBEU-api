@@ -6,13 +6,13 @@ const {
   bufferTimeoutMS,
   optimisticConcurrency,
   autoCreate,
-} = require('../config');
+} = require('../config/schema');
 
 const handleError = require('./utils');
 
 const fullName = {
   firstName: { type: String, required: [true, 'Provide First Name'] },
-  lastName: { type: String, required: [true, 'Provide Last Name'] },
+  lastName: { type: String },
 };
 
 const birth = {
@@ -177,108 +177,3 @@ userSchema.set({
 const UserModel = new mongoose.model('User', userSchema);
 
 module.exports = UserModel;
-
-// class User {
-//   constructor(
-//     fullName,
-//     birth,
-//     gender,
-//     cardAddress,
-//     phoneNumber,
-//     noKK,
-//     currentAddress,
-//     religion,
-//     marriageStatus,
-//     job,
-//     citizenship,
-//     nik,
-//     confirmed,
-//     addBy,
-//   ) {
-//     this.fullName = fullname;
-//     this.birth = birth;
-//     this.gender = gender;
-//     this.cardAddress = cardAddress;
-//     this.phoneNumber = phoneNumber;
-//     this.noKK = noKK;
-//     this.currentAddress = currentAddress;
-//     this.religion = religion;
-//     this.marriageStatus = marriageStatus;
-//     this.job = job;
-//     this.citizenship = citizenship;
-//     this.nik = nik;
-//     this.confirmed = confirmed;
-//     this.addBy = addBy;
-//   }
-
-// async function addUser(
-//   fullName,
-//   birth,
-//   gender,
-//   cardAddress,
-//   phoneNumber,
-//   noKK,
-//   currentAddress,
-//   religion,
-//   marriageStatus,
-//   job,
-//   citizenship,
-//   nik,
-//   confirmed,
-//   addBy,
-// ) {
-//   const formattedBirth = birth.split('-');
-//   const birthplace = formattedBirth[0];
-//   const year = parseInt(formattedBirth[1]);
-//   const month = parseInt(formattedBirth[2]);
-//   const day = parseInt(formattedBirth[3]);
-
-//   const newUser = new UserModel({
-//     namaLengkap: {
-//       firstName,
-//       lastName,
-//     },
-//     birth: {
-//       birthplace,
-//       year,
-//       month,
-//       day,
-//     },
-//     isMale,
-//     cardAddress,
-//   });
-
-//   try {
-//     await newUser.save();
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
-
-// async function getUser() {
-//   try {
-//     const usr = await UserModel.findOne();
-
-//     return usr;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }
-
-// module.exports = { getUser, addUser }
-
-// async function main() {
-//   await mongoose.connect('mongodb://localhost:27017/test');
-//   try {
-//     addUser('Muhammad', 'Alif Setya Prakasa', 'Pontianak-2000-10-06', true, 'Cillelang');
-//     getUser().then((doc) => {
-//       console.log(JSON.stringify(doc));
-//     });
-//   } catch (err) {
-//     console.log('err');
-//   }
-//   // console.log(getUser().cardAddress);
-//   // getUser();
-// }
-
-// main();

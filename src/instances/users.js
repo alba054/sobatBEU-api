@@ -17,15 +17,15 @@
 
 // import 3rd party modules
 const bycrpt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 // import local modules
 const UserModel = require('../models/userModel');
+
 
 class User {
   constructor(phoneNumber, password) {
     this.phoneNumber = phoneNumber;
     this.password = password;
-    // const salt = bycrpt.genSaltSync();
-    // this.password = bycrpt.hashSync(password, salt);
   }
 
   static async addUser(
@@ -55,21 +55,11 @@ class User {
       currentAddress: curAddress,
       marriageStatus: marriageStat,
     });
-    // console.log(newUser);
-    // try {
     const user = await newUser.save();
     return user;
-    // } catch (err) {
-    // console.log(err.name);
-    // }
-
-    // try {
-    //   await newUser.save();
-    // } catch (err) {
-    //   console.log(err);
-    // }
   }
 
+  // incomplete
   static getUser(fullname = null) {
     return UserModel.findOne();
   }
@@ -83,7 +73,17 @@ class User {
       throw new Error('password is wrong');
     }
 
-    return user;
+    console.log(process.env.SECRET_KEY);
+    // 1 day expiration time for the token
+    const token = jwt.sign(
+      {
+        user,
+        exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60),
+        iat: Math.floor(Date.now() / 1000),
+      }, process.env.SECRET_KEY,
+    );
+
+    return token;
   }
 }
 

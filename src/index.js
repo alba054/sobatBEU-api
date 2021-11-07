@@ -3,8 +3,6 @@ const Hapi = require('@hapi/hapi');
 // import local modules
 const routes = require('./routes');
 
-require('dotenv').config();
-
 const init = async () => {
   const server = Hapi.server({
     port: process.env.NODE_PORT || 5000,
