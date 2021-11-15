@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('./instances/users');
 const News = require('./instances/news');
 const loginHandler = require('./handlers/login');
+const adminLoginHandler = require('./handlers/sysadminLogin');
 
 require('dotenv').config();
 
@@ -66,6 +67,11 @@ const routes = [
       response.code(200);
       return response;
     },
+  },
+  {
+    method: 'POST',
+    path: '/login_admin',
+    handler: adminLoginHandler,
   },
   {
     method: 'POST',

@@ -34,6 +34,10 @@ class User {
     citizenship, nik, password, addBy = null, roles = 'umum',
     confirmed = false, complaints = [],
   ) {
+    if (password.length < 8) {
+      throw new Error('Password minimal 8 karakter');
+    }
+
     const salt = bycrpt.genSaltSync();
     const hashedPass = bycrpt.hashSync(password, salt);
     const newUser = new UserModel({
@@ -73,7 +77,6 @@ class User {
       throw new Error('password is wrong');
     }
 
-    console.log(process.env.SECRET_KEY);
     // 1 day expiration time for the token
     const token = jwt.sign(
       {
