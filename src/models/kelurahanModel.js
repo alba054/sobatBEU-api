@@ -1,63 +1,48 @@
 const mongoose = require('mongoose');
 const { bufferCommands, bufferTimeoutMS, optimisticConcurrency } = require('../config/schema');
 
-const code = {
+const provinceId = { type: String };
+const provinceName = { type: String };
+const kabupatenId = { type: String };
+const kabupatenCode = {
   type: String,
-  unique: true,
-  required: [true, 'Provide Code'],
   validate: {
-    validator: (v) => /\d{9,11}/.test(v),
-    message: 'code is not valid',
+    validator: (v) => /\d{3,4}-\d{3,4}/.test(v),
+    message: 'kode kabupaten tidak valid',
   },
 };
-
-const name = {
+const kabupatenName = { type: String };
+const kecamatanId = { type: String };
+const kecamatanCode = {
   type: String,
-  unique: true,
-  required: [true, 'Provide Name'],
-};
-
-const numUsers = {
-  type: Number,
-  default: 0,
-};
-
-const address = {
-  type: String,
-  required: [true, 'Provide Address'],
-};
-
-const postCode = {
-  type: String,
-  required: [true, 'Provide Postcode'],
   validate: {
-    validator: (v) => /\d{4,6}/.test(v),
-    message: 'postcode is not valid',
+    validator: (v) => /\d{3,4}-\d{3,4}-\d{4,5}/.test(v),
+    message: 'kode kecamatan tidak valid',
   },
 };
-
-const area = {
-  type: Number,
-};
-
-const website = {
+const kecamatanName = { type: String };
+const kelurahanId = { type: String };
+const kelurahanCode = {
   type: String,
+  validate: {
+    validator: (v) => /\d{3,4}-\d{3,4}-\d{4,5}-\d{4,5}/.test(v),
+    message: 'kode kelurahan tidak valid',
+  },
 };
-
-const kecamatan = {
-  type: mongoose.Schema.Types.ObjectId,
-  required: [true, 'Provide Kecamatan ID'],
-};
+const kelurahanName = { type: String };
 
 const kelurahanSchema = mongoose.Schema({
-  code,
-  name,
-  numUsers,
-  address,
-  postCode,
-  area,
-  website,
-  kecamatan,
+  provinceId,
+  provinceName,
+  kabupatenId,
+  kabupatenCode,
+  kabupatenName,
+  kecamatanId,
+  kecamatanCode,
+  kecamatanName,
+  kelurahanId,
+  kelurahanCode,
+  kelurahanName,
 });
 
 kelurahanSchema.set({

@@ -10,10 +10,8 @@ const {
 
 const handleError = require('./utils');
 
-const fullName = {
-  firstName: { type: String, required: [true, 'Provide First Name'] },
-  lastName: { type: String },
-};
+
+const fullName = { type: String, required: [true, 'Nama tidak boleh kosong'] };
 
 const birth = {
   birthplace: { type: String, required: [true, 'Provide Birthplace'] },
@@ -33,11 +31,11 @@ const gender = {
     message: '{VALUE} is not supported',
   },
   // lowercase: true,
-  required: [true, 'Provide gender'],
+  required: [true, 'jenis kelamin boleh kosong'],
 };
 
 const cardAddress = {
-  address: { type: String, required: [true, 'Provide address'] },
+  address: { type: String, required: [true, 'alamat tidak boleh kosong'] },
   kelurahan: {
     type: mongoose.Schema.Types.ObjectId,
     default: null,
@@ -48,7 +46,7 @@ const cardAddress = {
 
 const phoneNumber = {
   type: String,
-  required: [true, 'Provide Phone Number'],
+  required: [true, 'nomor telepon tidak boleh kosong'],
   validate: {
     validator: (v) => /^\+62[\d]{10,15}/.test(v),
     message: 'phone number isn\'t valid',
@@ -58,7 +56,7 @@ const phoneNumber = {
 
 const noKK = {
   type: String,
-  default: 'xxx00000xx',
+  default: 'xxxxx000000xxxxx',
 };
 
 const currentAddress = {
@@ -74,7 +72,7 @@ const marriageStatus = {
     message: '{VALUE} is not supported',
   },
   // lowercase: true,
-  required: [true, 'Provide Marriage Status'],
+  required: [true, 'status pernikahan tidak boleh kosong'],
 };
 
 const job = { type: String };
@@ -85,11 +83,12 @@ const citizenship = {
     message: '{VALUE} is not supported',
   },
   // lowercase: true,
+  default: 'WNI',
 };
 
 const nik = {
   type: String,
-  required: [true, 'Provide NIK'],
+  required: [true, 'NIK tidak boleh kosong'],
   unique: true,
 };
 
@@ -97,13 +96,13 @@ const password = {
   type: String,
   minLength: 59,
   maxLength: 61,
-  required: [true, 'Provide Password'],
+  required: [true, 'password tidak boleh kosong'],
 };
 
 const roles = {
   type: String,
   enum: {
-    values: ['umum', 'korlu', 'korcam', 'korpil', 'admin'],
+    values: ['umum', 'korlu', 'korcam', 'korpil'],
     message: '{VALUE} is not supported',
   },
   default: 'umum',
