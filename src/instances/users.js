@@ -81,6 +81,7 @@ class User {
     const token = jwt.sign(
       {
         user,
+        sub: `${process.env.SUBJECT_URI}mobile`,
         exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60),
         iat: Math.floor(Date.now() / 1000),
       }, process.env.SECRET_KEY,

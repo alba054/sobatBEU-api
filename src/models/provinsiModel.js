@@ -1,5 +1,8 @@
+// import 3rd party modules
 const mongoose = require('mongoose');
+// import local modules
 const { bufferCommands, bufferTimeoutMS, optimisticConcurrency } = require('../config/schema');
+const handleError = require('./utils');
 
 const provinceId = { type: String, unique: true };
 const provinceName = { type: String };
@@ -12,6 +15,8 @@ provinceSchema.set({
   optimisticConcurrency,
 });
 
-const provinceModel = mongoose.model('provinsi', provinceSchema);
+provinceSchema.post('save', handleError);
 
-module.exports = provinceModel;
+const ProvinceModel = mongoose.model('provinsi', provinceSchema);
+
+module.exports = ProvinceModel;

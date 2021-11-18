@@ -1,5 +1,8 @@
+// import 3rd party modules
 const mongoose = require('mongoose');
+// import local modules
 const { bufferCommands, bufferTimeoutMS, optimisticConcurrency } = require('../config/schema');
+const handleError = require('./utils');
 
 const provinceId = { type: String };
 const provinceName = { type: String };
@@ -28,6 +31,7 @@ const kelurahanCode = {
     validator: (v) => /\d{3,4}-\d{3,4}-\d{4,5}-\d{4,5}/.test(v),
     message: 'kode kelurahan tidak valid',
   },
+  unique: true,
 };
 const kelurahanName = { type: String };
 
@@ -51,6 +55,8 @@ kelurahanSchema.set({
   optimisticConcurrency,
 });
 
-const kelurahanModel = mongoose.model('kelurahan', kelurahanSchema);
+kelurahanSchema.post('save', handleError);
 
-module.exports = kelurahanModel;
+const KelurahanModel = mongoose.model('kelurahan', kelurahanSchema);
+
+module.exports = KelurahanModel;

@@ -3,8 +3,12 @@ const jwt = require('jsonwebtoken');
 // import local modules
 const User = require('./instances/users');
 const News = require('./instances/news');
+// handlers
 const loginHandler = require('./handlers/login');
-const adminLoginHandler = require('./handlers/sysadminLogin');
+const { addProvinceHandler, getAllProvincesHandler } = require('./handlers/provinsiHandler');
+const { addKabupatenHandler, getKabupatenByIdHandler } = require('./handlers/kabupatenHandler');
+const { addKecamatanHandler, getKecamatanByCodeHandler } = require('./handlers/kecamatanHandler');
+const { addKelurahanHandler, getKelurahanByCodeHandler } = require('./handlers/kelurahanHandler');
 
 require('dotenv').config();
 
@@ -70,57 +74,88 @@ const routes = [
   },
   {
     method: 'POST',
-    path: '/login_admin',
-    handler: adminLoginHandler,
-  },
-  {
-    method: 'POST',
     path: '/login',
     handler: loginHandler,
   },
   {
-    method: ['POST', 'GET'],
+    method: 'POST',
+    path: '/api/wilayah',
+    handler: addProvinceHandler,
+  },
+  {
+    method: 'GET',
+    path: '/api/wilayah',
+    handler: getAllProvincesHandler,
+  },
+  {
+    method: 'POST',
+    path: '/api/wilayah/{provinceId}',
+    handler: addKabupatenHandler,
+  },
+  {
+    method: 'GET',
+    path: '/api/wilayah/{provinceId}',
+    handler: getKabupatenByIdHandler,
+  },
+  {
+    method: 'POST',
+    path: '/api/wilayah/{provinceId}-{kabupatenId}',
+    handler: addKecamatanHandler,
+  },
+  {
+    method: 'GET',
+    path: '/api/wilayah/{provinceId}-{kabupatenId}',
+    handler: getKecamatanByCodeHandler,
+  },
+  {
+    method: 'POST',
+    path: '/api/wilayah/{provinceId}-{kabupatenId}-{kecamatanId}',
+    handler: addKelurahanHandler,
+  },
+  {
+    method: 'GET',
+    path: '/api/wilayah/{provinceId}-{kabupatenId}-{kecamatanId}',
+    handler: getKelurahanByCodeHandler,
+  },
+  {
+    method: 'POST',
     path: '/api/user',
     handler: async (request, h) => {
       // mongoose.connect('mongodb://localhost:27017/sobatBeuTest');
-      if (request.method === 'post') {
-        try {
-          const {
-            fullname,
-            birth,
-            gender,
-            cardAddress,
-            phoneNumber,
-            noKK,
-            currentAddress,
-            religion,
-            marriageStatus,
-            job,
-            citizenship,
-            nik,
-            password,
-            addBy,
-            roles,
-            confirmed,
-            complaints,
-          } = request.payload;
+      try {
+        const {
+          fullname,
+          birth,
+          gender,
+          cardAddress,
+          phoneNumber,
+          noKK,
+          currentAddress,
+          religion,
+          marriageStatus,
+          job,
+          citizenship,
+          nik,
+          password,
+          addBy,
+          roles,
+          confirmed,
+          complaints,
+        } = request.payload;
 
-          const user = await User.addUser(
-            fullname, birth, gender, cardAddress, phoneNumber, noKK,
-            currentAddress, religion, marriageStatus, job, citizenship,
-            nik, password, addBy, roles, confirmed, complaints,
-          );
-          return { status: 'success', message: 'adding new user successfully', res: user };
-        } catch (err) {
-          if (err instanceof TypeError) {
-            return { status: 'failed', message: 'doesn\'t meet payload requirements' };
-          }
-          return { status: 'failed', message: err.message };
-          // return 'error';
+        const user = await User.addUser(
+          fullname, birth, gender, cardAddress, phoneNumber, noKK,
+          currentAddress, religion, marriageStatus, job, citizenship,
+          nik, password, addBy, roles, confirmed, complaints,
+        );
+        return { status: 'success', message: 'adding new user successfully', res: user };
+      } catch (err) {
+        if (err instanceof TypeError) {
+          return { status: 'failed', message: 'doesn\'t meet payload requirements' };
         }
+        return { status: 'failed', message: err.message };
+        // return 'error';
       }
-
-      return User.getUser('a');
     },
   },
   // {

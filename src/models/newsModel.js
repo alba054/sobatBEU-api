@@ -16,7 +16,7 @@ const newsSchema = new mongoose.Schema({
     type: String,
     default: 'link',
     enum: {
-      values: ['ori', 'link'],
+      values: ['ori', 'link'], // ori means content is not empty
       message: '{VALUE} is not supported',
     },
   },
