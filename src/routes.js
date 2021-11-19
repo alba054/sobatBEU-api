@@ -9,6 +9,8 @@ const { addProvinceHandler, getAllProvincesHandler } = require('./handlers/provi
 const { addKabupatenHandler, getKabupatenByIdHandler } = require('./handlers/kabupatenHandler');
 const { addKecamatanHandler, getKecamatanByCodeHandler } = require('./handlers/kecamatanHandler');
 const { addKelurahanHandler, getKelurahanByCodeHandler } = require('./handlers/kelurahanHandler');
+const addCandidateHandler = require('./handlers/candidateHandler');
+const { addWebAdminHandler, getWebAdminByCandidate } = require('./handlers/webAdminHandler');
 
 require('dotenv').config();
 
@@ -116,6 +118,21 @@ const routes = [
     method: 'GET',
     path: '/api/wilayah/{provinceId}-{kabupatenId}-{kecamatanId}',
     handler: getKelurahanByCodeHandler,
+  },
+  {
+    method: 'POST',
+    path: '/api/kandidat',
+    handler: addCandidateHandler,
+  },
+  {
+    method: 'POST',
+    path: '/api/admin',
+    handler: addWebAdminHandler,
+  },
+  {
+    method: 'GET',
+    path: '/api/admin/{candidateNum}',
+    handler: getWebAdminByCandidate,
   },
   {
     method: 'POST',

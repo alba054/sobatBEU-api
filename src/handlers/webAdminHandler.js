@@ -1,27 +1,22 @@
 // import 3rd party modules
 const jwt = require('jsonwebtoken');
 // import local modules
-const Provinsi = require('../instances/provinsi');
+const WebAdmin = require('../instances/webAdmin');
 
-const addProvinceHandler = async (request, h) => {
+const addWebAdminHandler = async (request, h) => {
   const { token } = request.headers;
-  const { provinceId, provinceName } = request.payload;
+  const profile = request.payload;
+
   let response = null;
   let decoded = null;
-  if (typeof provinceId === 'undefined' || typeof provinceName === 'undefined') {
-    response = h.response({ status: 'failed', message: 'payload tidak lengkap' });
-    response.code(400);
-
-    return response;
-  }
 
   try {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
 
     if (sub === 'sysadmin') {
-      const provinsi = await Provinsi.addProvince(provinceId, provinceName);
-      response = h.response({ status: 'success', message: 'menambah provinsi baru', res: provinsi });
+      const webAdmin = await WebAdmin.addWebAdmin(profile);
+      response = h.response({ status: 'success', message: 'menambah web admin baru', res: webAdmin });
       response.code(201);
 
       return response;
@@ -34,22 +29,25 @@ const addProvinceHandler = async (request, h) => {
 
   } catch (err) {
     response = h.response({ status: 'failed', message: err.message });
+    response.code(400);
 
     return response;
   }
 };
 
-const getAllProvincesHandler = async (request, h) => {
+const getWebAdminByCandidate = async (request, h) => {
   const { token } = request.headers;
+  const { candidateNum } = request.params;
+
   let response = null;
   let decoded = null;
+
   try {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
-
     if (sub === 'sysadmin') {
-      const provinsi = await Provinsi.getAllProvinces();
-      response = h.response({ status: 'success', message: 'valid', res: provinsi });
+      const webAdmins = await WebAdmin.getWebAdminByCandidate(candidateNum);
+      response = h.response({ status: 'success', message: 'valid', res: webAdmins });
       response.code(200);
 
       return response;
@@ -68,5 +66,4 @@ const getAllProvincesHandler = async (request, h) => {
   }
 };
 
-module.exports = { addProvinceHandler, getAllProvincesHandler };
-
+module.exports = { addWebAdminHandler, getWebAdminByCandidate };

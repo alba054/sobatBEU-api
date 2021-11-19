@@ -7,7 +7,6 @@ const {
   optimisticConcurrency,
   autoCreate,
 } = require('../config/schema');
-
 const handleError = require('./utils');
 
 const username = {
@@ -25,52 +24,24 @@ const password = {
   maxLength: 61,
   required: [true, 'password tidak boleh kosong'],
 };
-const level = {
+const candidateNum = {
   type: String,
-  enum: {
-    values: ['walikota', 'gubernur', 'dprd', 'dpr ri'],
-    message: '{VALUE} tidak sesuai',
-  },
-  required: [true, 'level tidak valid'],
-};
-const provinceId = { type: String };
-const kabupatenCode = {
-  type: String,
-  validate: {
-    validator: (v) => /\d{3,4}-\d{3,4}/.test(v),
-    message: 'kode kabupaten tidak valid',
-  },
-};
-const kecamatanCode = {
-  type: String,
-  validate: {
-    validator: (v) => /\d{3,4}-\d{3,4}-\d{4,5}/.test(v),
-    message: 'kode kecamatan tidak valid',
-  },
-};
-const kelurahanCode = {
-  type: String,
-  validate: {
-    validator: (v) => /\d{3,4}-\d{3,4}-\d{4,5}-\d{4,5}/.test(v),
-    message: 'kode kelurahan tidak valid',
-  },
-};
-// identify admin
-const calegNum = {
-  type: Number,
-  required: [true, 'harus ada'],
-  unique: true,
+  required: [true, 'candidateNum harus diisi'],
 };
 
 const webAdminSchema = mongoose.Schema({
   username,
   password,
-  level,
-  provinceId,
-  kabupatenCode,
-  kecamatanCode,
-  kelurahanCode,
-  calegNum,
+  candidateNum,
+  createdAt: String,
+  updatedAt: String,
+}, {
+  timestamps: {
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    currentTime: () => new Date(Date.now()).toString(),
+  },
+  toJSON: { virtuals: true },
 });
 
 webAdminSchema.post('save', handleError);
@@ -84,6 +55,13 @@ webAdminSchema.set({
   autoCreate,
 });
 
-const webAdminModel = mongoose.model('web_admin', webAdminSchema);
+// virtual populate
+webAdminSchema.virtual('candidate', {
+  ref: 'candidate_profile',
+  localField: 'candidateNum',
+  foreignField: 'candidateNum',
+});
 
-module.exports = webAdminModel;
+const WebAdminModel = mongoose.model('web_admin', webAdminSchema);
+
+module.exports = WebAdminModel;
