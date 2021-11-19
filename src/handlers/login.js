@@ -2,6 +2,7 @@
 const jwt = require('jsonwebtoken');
 // import local modules
 const User = require('../instances/users');
+const WebAdmin = require('../instances/webAdmin');
 
 const mobileLogin = async (phone, password) => {
   const user = new User(phone, password);
@@ -9,6 +10,18 @@ const mobileLogin = async (phone, password) => {
     const token = await user.login();
 
     return [{ status: 'success', message: 'user is valid', res: token }, 200];
+  } catch (err) {
+    return [{ status: 'failed', message: err.message }, 401];
+  }
+};
+
+const webAdminLogin = async (username, password) => {
+  const webAdmin = new WebAdmin(username, password);
+
+  try {
+    const token = await webAdmin.login();
+
+    return [{ status: 'success', message: 'admin is valid', res: token }, 200];
   } catch (err) {
     return [{ status: 'failed', message: err.message }, 401];
   }
@@ -37,6 +50,7 @@ const loginHandler = async (request, h) => {
   let phone = null;
   let username = null;
   let password = null;
+
   switch (mode) {
     case 'mobile':
       phone = request.headers.phone;
@@ -46,6 +60,11 @@ const loginHandler = async (request, h) => {
       response.code(res[1]);
       break;
     case 'web':
+      username = request.headers.username;
+      password = request.headers.password;
+      res = await webAdminLogin(username, password);
+      response = h.response(res[0]);
+      response.code(res[1]);
       break;
     default:
       username = request.headers.username;
