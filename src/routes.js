@@ -11,6 +11,13 @@ const { addKecamatanHandler, getKecamatanByCodeHandler } = require('./handlers/k
 const { addKelurahanHandler, getKelurahanByCodeHandler } = require('./handlers/kelurahanHandler');
 const addCandidateHandler = require('./handlers/candidateHandler');
 const { addWebAdminHandler, getWebAdminByCandidate } = require('./handlers/webAdminHandler');
+const {
+  addCandidateNews,
+  getCandidateNews,
+  getOneCandidateNews,
+  updateCandidateNews,
+  deleteCandidateNews,
+} = require('./handlers/newsHandler');
 
 require('dotenv').config();
 
@@ -133,6 +140,31 @@ const routes = [
     method: 'GET',
     path: '/api/admin/{candidateNum}',
     handler: getWebAdminByCandidate,
+  },
+  {
+    method: 'POST',
+    path: '/api/news/{candidateNum}',
+    handler: addCandidateNews,
+  },
+  {
+    method: 'GET',
+    path: '/api/news/{candidateNum}',
+    handler: getCandidateNews,
+  },
+  {
+    method: 'GET',
+    path: '/api/news/{candidateNum}/{id}',
+    handler: getOneCandidateNews,
+  },
+  {
+    method: 'PUT',
+    path: '/api/news/{candidateNum}/{id}',
+    handler: updateCandidateNews,
+  },
+  {
+    method: 'DELETE',
+    path: '/api/news/{candidateNum}/{id}',
+    handler: deleteCandidateNews,
   },
   {
     method: 'POST',

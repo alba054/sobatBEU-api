@@ -13,7 +13,7 @@ const handleError = require('./utils');
 // as reference for web admin
 const candidateNum = {
   type: String,
-  required: [true, 'harus ada'],
+  required: [true, 'candidateNum harus ada'],
   unique: true,
 };
 
