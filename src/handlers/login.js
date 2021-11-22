@@ -31,7 +31,7 @@ const sysadminLogin = (username, password) => {
   if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
     const token = jwt.sign(
       {
-        sub: `${process.env.SUBJECT_URI}sysadmin`,
+        sub: `${process.env.SUBJECT_URI}${process.env.SUB_ADMIN}`,
         exp: Math.floor(Date.now() / 1000) + (24 * 60 * 60),
         iat: Math.floor(Date.now() / 1000),
       }, process.env.SECRET_KEY,

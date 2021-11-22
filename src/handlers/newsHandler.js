@@ -14,8 +14,8 @@ const addCandidateNews = async (request, h) => {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
 
-    if (sub === 'sysadmin' || sub === 'webadmin') {
-      if (sub === 'webadmin') {
+    if (sub === process.env.SUB_ADMIN || sub === process.env.SUB_WEB) {
+      if (sub === process.env.SUB_WEB) {
         profile.isCreatedByAdmin = false;
         profile.isUpdatedByAdmin = false;
         profile.createdBy = decoded.webAdmin._id;
@@ -106,11 +106,11 @@ const updateCandidateNews = async (request, h) => {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
 
-    if (sub === 'sysadmin' || sub === 'webadmin') {
-      if (sub === 'webadmin') {
+    if (sub === process.env.SUB_ADMIN || sub === process.env.SUB_WEB) {
+      if (sub === process.env.SUB_WEB) {
         profile.updatedBy = decoded.webAdmin._id;
         profile.isUpdatedByAdmin = false;
-      } else if (sub === 'sysadmin') {
+      } else if (sub === process.env.SUB_ADMIN) {
         profile.updatedBy = null;
         profile.isUpdatedByAdmin = true;
       }
@@ -146,7 +146,7 @@ const deleteCandidateNews = async (request, h) => {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
 
-    if (sub === 'sysadmin' || sub === 'webadmin') {
+    if (sub === process.env.SUB_ADMIN || sub === process.env.SUB_WEB) {
 
       const res = await News.deleteNews(candidateNum, id);
       response = h.response({ status: 'success', message: 'menghapus berita', res });

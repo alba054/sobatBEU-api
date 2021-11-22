@@ -19,7 +19,7 @@ const addProvinceHandler = async (request, h) => {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
 
-    if (sub === 'sysadmin') {
+    if (sub === process.env.SUB_ADMIN) {
       const provinsi = await Provinsi.addProvince(provinceId, provinceName);
       response = h.response({ status: 'success', message: 'menambah provinsi baru', res: provinsi });
       response.code(201);
@@ -47,7 +47,7 @@ const getAllProvincesHandler = async (request, h) => {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
 
-    if (sub === 'sysadmin') {
+    if (sub === process.env.SUB_ADMIN) {
       const provinsi = await Provinsi.getAllProvinces();
       response = h.response({ status: 'success', message: 'valid', res: provinsi });
       response.code(200);

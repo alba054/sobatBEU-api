@@ -15,7 +15,7 @@ const addCandidateHandler = async (request, h) => {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
 
-    if (sub === 'sysadmin') {
+    if (sub === process.env.SUB_ADMIN) {
       profile.candidateNum = nanoid.nanoid(15);
       const candidate = await CandidateProfile.addCandidate(profile);
       response = h.response({ status: 'success', message: 'menambah kandidat baru', res: candidate });

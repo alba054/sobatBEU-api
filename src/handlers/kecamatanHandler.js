@@ -33,7 +33,7 @@ const addKecamatanHandler = async (request, h) => {
   try {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
-    if (sub === 'sysadmin') {
+    if (sub === process.env.SUB_ADMIN) {
       const kabupatenCode = `${provinceId}-${kabupatenId}`;
       const kecamatan = await Kecamatan.addKecamatan(
         provinceId,
@@ -73,7 +73,7 @@ const getKecamatanByCodeHandler = async (request, h) => {
   try {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
-    if (sub === 'sysadmin') {
+    if (sub === process.env.SUB_ADMIN) {
       const kecamatan = await Kecamatan.getKecamatanByCode(kabupatenCode);
       response = h.response({ status: 'success', message: 'valid', res: kecamatan });
       response.code(200);

@@ -14,7 +14,7 @@ const addWebAdminHandler = async (request, h) => {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
 
-    if (sub === 'sysadmin') {
+    if (sub === process.env.SUB_ADMIN) {
       const webAdmin = await WebAdmin.addWebAdmin(profile);
       response = h.response({ status: 'success', message: 'menambah web admin baru', res: webAdmin });
       response.code(201);
@@ -45,7 +45,7 @@ const getWebAdminByCandidate = async (request, h) => {
   try {
     decoded = jwt.verify(token, process.env.SECRET_KEY);
     const sub = decoded.sub.split('::')[2];
-    if (sub === 'sysadmin') {
+    if (sub === process.env.SUB_ADMIN) {
       const webAdmins = await WebAdmin.getWebAdminByCandidate(candidateNum);
       response = h.response({ status: 'success', message: 'valid', res: webAdmins });
       response.code(200);
